@@ -24,13 +24,11 @@ public class FirstTest {
 
     @Test
     void checkForm(){
-
         $("#firstName").setValue("Mikhail");
         $("#lastName").setValue("Loginov");
         $("#userEmail").setValue("random@mail.ru");
         $("[for='gender-radio-1']").click();
         $("#userNumber").setValue("1234567890");
-
 
         $("#dateOfBirthInput").click();
         $("[class*='month-select']").selectOptionByValue("2");
@@ -54,8 +52,6 @@ public class FirstTest {
 
         $(byText("Thanks for submitting the form")).should(appear);
         $(".modal-content").should(appear);
-
-
     }
 
 }
