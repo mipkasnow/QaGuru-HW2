@@ -1,12 +1,15 @@
+import com.codeborne.selenide.CollectionCondition;
 import com.codeborne.selenide.Configuration;
 import com.codeborne.selenide.ElementsCollection;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.ElementClickInterceptedException;
 
 import java.io.File;
 
-import static com.codeborne.selenide.Condition.appear;
+import static com.codeborne.selenide.CollectionCondition.*;
+import static com.codeborne.selenide.Condition.*;
 import static com.codeborne.selenide.Selectors.byText;
 import static com.codeborne.selenide.Selenide.*;
 
@@ -20,11 +23,11 @@ public class FirstTest {
     }
 
     @Test
-    void checkForm(){
+    void checkForm() {
         $("#firstName").setValue("Mikhail");
         $("#lastName").setValue("Loginov");
         $("#userEmail").setValue("random@mail.ru");
-        $("[for='gender-radio-1']").click();
+        $("[for='gender-radio-2']").click();
         $("#userNumber").setValue("1234567890");
 
         $("#dateOfBirthInput").click();
@@ -32,6 +35,7 @@ public class FirstTest {
         $("[class*='year-select']").selectOptionByValue("1993");
         $("[class*='datepicker__day--016']").click();
         $("#subjectsInput").setValue("Math").pressEnter();
+        $("#subjectsInput").setValue("English").pressEnter();
 
         ElementsCollection hobbies = $$("[for*='hobbies-checkbox']");
         int count = hobbies.size();
@@ -54,7 +58,7 @@ public class FirstTest {
         $(byText("Thanks for submitting the form")).should(appear);
         $(byText("Mikhail Loginov")).should(appear);
         $(byText("random@mail.ru")).should(appear);
-        $(byText("Male")).should(appear);
+        $(byText("Female")).should(visible);
         $(byText("1234567890")).should(appear);
         $(byText("16 March,1993")).should(appear);
         $(byText("Maths")).should(appear);
@@ -62,11 +66,13 @@ public class FirstTest {
         $(byText("qa-guru.txt")).should(appear);
         $(byText("Saint-Pee")).should(appear);
         $(byText("NCR Delhi")).should(appear);
+
+        // Альтернативные варианты проверок
+        $(".table-responsive").shouldHave(text("qa-guru.txt"), text("Saint-Pee"), text("NCR Delhi"));
+        $$("td").shouldHave(containExactTextsCaseSensitive("Mikhail Loginov", "random@mail.ru", "Female"));
     }
 
     @AfterEach
-    void after(){
-        closeWebDriver();
-    }
+    void after(){closeWebDriver();}
 
 }
